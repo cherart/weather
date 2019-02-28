@@ -44,21 +44,21 @@ fun getIcon(icon: String, colored: Boolean): Int {
     }
 }
 
-fun getBackgroundColor(icon: String): Int {
-    return when (icon) {
-        "clear-day" -> R.color.colorBackgroundClearDay
-        "clear-night" -> R.color.colorBackgroundClearNight
-        "rain" -> R.color.colorBackgroundRain
-        "snow" -> R.color.colorBackgroundSnow
-        "sleet" -> R.color.colorBackgroundSleet
-        "wind" -> R.color.colorBackgroundWind
-        "fog" -> R.color.colorBackgroundFog
-        "cloudy" -> R.color.colorBackgroundCloudy
-        "partly-cloudy-day" -> R.color.colorBackgroundPartlyCloudyDay
-        "partly-cloudy-night" -> R.color.colorBackgroundPartlyCloudyNight
-        "hail" -> R.color.colorBackgroundHail
-        "thunderstorm" -> R.color.colorBackgroundThunderstorm
-        "tornado" -> R.color.colorBackgroundTornado
-        else -> R.color.colorBackgroundClearDay
-    }
-}
+//fun getBackgroundColor(icon: String): Int {
+//    return when (icon) {
+//        "clear-day" -> R.color.colorBackgroundClearDay
+//        "clear-night" -> R.color.colorBackgroundClearNight
+//        "rain" -> R.color.colorBackgroundRain
+//        "snow" -> R.color.colorBackgroundSnow
+//        "sleet" -> R.color.colorBackgroundSleet
+//        "wind" -> R.color.colorBackgroundWind
+//        "fog" -> R.color.colorBackgroundFog
+//        "cloudy" -> R.color.colorBackgroundCloudy
+//        "partly-cloudy-day" -> R.color.colorBackgroundPartlyCloudyDay
+//        "partly-cloudy-night" -> R.color.colorBackgroundPartlyCloudyNight
+//        "hail" -> R.color.colorBackgroundHail
+//        "thunderstorm" -> R.color.colorBackgroundThunderstorm
+//        "tornado" -> R.color.colorBackgroundTornado
+//        else -> R.color.colorBackgroundClearDay
+//    }
+//}

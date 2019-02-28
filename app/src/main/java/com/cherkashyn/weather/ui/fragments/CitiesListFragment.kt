@@ -1,8 +1,6 @@
 package com.cherkashyn.weather.ui.fragments
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -10,9 +8,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -22,7 +18,6 @@ import com.cherkashyn.weather.R
 import com.cherkashyn.weather.model.City
 import com.cherkashyn.weather.ui.adapters.CitiesListAdapter
 import com.cherkashyn.weather.ui.adapters.HoursListAdapter
-import com.cherkashyn.weather.utils.getBackgroundColor
 import com.cherkashyn.weather.utils.getDayOfWeek
 import com.cherkashyn.weather.utils.getIcon
 import com.cherkashyn.weather.utils.getTime
@@ -34,7 +29,6 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.yarolegovich.discretescrollview.transform.DiscreteScrollItemTransformer
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_cities_list.*
 import kotlinx.android.synthetic.main.fragment_cities_list.view.*
 import kotlinx.android.synthetic.main.item_expanded_day.*
 import kotlinx.android.synthetic.main.item_expanded_day.view.*
@@ -95,16 +89,7 @@ class CitiesListFragment : DaggerFragment() {
 
     private fun initDiscreteScrollView() {
         mainView.citiesListDiscreteScrollView.apply {
-            adapter = citiesListAdapter.apply {
-                setCallback(object : Callback {
-                    override fun callback(icon: String) {
-                        val layerDrawable = ContextCompat.getDrawable(context, R.drawable.ic_city) as LayerDrawable
-                        val gradientDrawable =
-                            layerDrawable.findDrawableByLayerId(R.id.listview_background_shape) as GradientDrawable
-                        gradientDrawable.setColor(getBackgroundColor(icon))
-                    }
-                })
-            }
+            adapter = citiesListAdapter
             setItemTransformer(discreteScrollItemTransformer)
             setSlideOnFling(true)
         }
@@ -149,9 +134,9 @@ class CitiesListFragment : DaggerFragment() {
             val typedValue = TypedValue()
             activity!!.theme.resolveAttribute(android.R.attr.actionBarItemBackground, typedValue, true)
             if (typedValue.resourceId != 0) {
-                this.setBackgroundResource(typedValue.resourceId);
+                this.setBackgroundResource(typedValue.resourceId)
             } else {
-                this.setBackgroundColor(typedValue.data);
+                this.setBackgroundColor(typedValue.data)
             }
         }
 
@@ -180,36 +165,38 @@ class CitiesListFragment : DaggerFragment() {
 
     private fun initOnItemChangedListener() {
         mainView.citiesListDiscreteScrollView.addOnItemChangedListener { holder, position ->
-            val city = citiesListAdapter.getData()[position]
+            if (citiesListAdapter.getData().isNotEmpty()) {
+                val city = citiesListAdapter.getData()[position]
 
-            if (System.currentTimeMillis() / 1000L - city.currently!!.time!! > 2000) {
-                viewModel.refresh(city.latitude!!, city.longitude!!, position == 0)
-            } else {
-                with(city.currently!!) {
+                if (System.currentTimeMillis() / 1000L - city.currently!!.time!! > 2000) {
+                    viewModel.refresh(city.latitude!!, city.longitude!!, position == 0)
+                } else {
+                    with(city.currently!!) {
 
-                    val temperature: String = temperature?.toInt().toString() + "º"
-                    val dayOfWeek: String = getDayOfWeek(time!!)
-                    val time: String = getTime(time!!)
-                    val humidity: String = (humidity!! * 100).toInt().toString() + " %"
-                    val windSpeed: String = windSpeed.toString() + " м/c"
-                    val precip: String = precipIntensity.toString() + " мм/ч"
-                    val iconColored: Int = getIcon(icon!!, true)
-                    val iconBlue: Int = getIcon(icon!!, false)
+                        val temperature: String = temperature?.toInt().toString() + "º"
+                        val dayOfWeek: String = getDayOfWeek(time!!)
+                        val time: String = getTime(time!!)
+                        val humidity: String = (humidity!! * 100).toInt().toString() + " %"
+                        val windSpeed: String = windSpeed.toString() + " м/c"
+                        val precip: String = precipIntensity.toString() + " мм/ч"
+                        val iconColored: Int = getIcon(icon!!, true)
+                        val iconBlue: Int = getIcon(icon!!, false)
 
-                    expandedTemperature.text = temperature
-                    expandedDayOfWeek.text = "Сейчас"
-                    expandedSubDayOfWeek.text = dayOfWeek
-                    expandedSubTime.text = time
-                    expandedSubTemperature.text = temperature
-                    expandedSubHumidityValue.text = humidity
-                    expandedSubWindValue.text = windSpeed
-                    expandedSubPrecipitationValue.text = precip
-                    expandedIcon.setImageResource(iconColored)
-                    expandedSubIcon.setImageResource(iconBlue)
-                }
+                        expandedTemperature.text = temperature
+                        expandedDayOfWeek.text = "Сейчас"
+                        expandedSubDayOfWeek.text = dayOfWeek
+                        expandedSubTime.text = time
+                        expandedSubTemperature.text = temperature
+                        expandedSubHumidityValue.text = humidity
+                        expandedSubWindValue.text = windSpeed
+                        expandedSubPrecipitationValue.text = precip
+                        expandedIcon.setImageResource(iconColored)
+                        expandedSubIcon.setImageResource(iconBlue)
+                    }
 
-                with(city.hourly!!) {
-                    hoursListAdapter.setData(dataHourlies!!.subList(0, 25))
+                    with(city.hourly!!) {
+                        hoursListAdapter.setData(dataHourlies!!.subList(0, 25))
+                    }
                 }
             }
         }
@@ -217,9 +204,5 @@ class CitiesListFragment : DaggerFragment() {
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
-    }
-
-    interface Callback {
-        fun callback(icon: String)
     }
 }

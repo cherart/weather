@@ -20,6 +20,10 @@ class DataDaily {
     var precipIntensity: Double? = null
     @SerializedName("temperatureMax")
     var temperatureMax: Double? = null
+    @SerializedName("sunriseTime")
+    var sunriseTime: Int? = null
+    @SerializedName("sunsetTime")
+    var sunsetTime: Int? = null
 
 //    @SerializedName("temperatureMin")
 //    var temperatureMin: Double? = null
@@ -27,12 +31,6 @@ class DataDaily {
 //    @SerializedName("summary")
 //    @Expose
 //    var summary: String? = null
-//    @SerializedName("sunriseTime")
-//    @Expose
-//    var sunriseTime: Int? = null
-//    @SerializedName("sunsetTime")
-//    @Expose
-//    var sunsetTime: Int? = null
 //    @SerializedName("moonPhase")
 //    @Expose
 //    var moonPhase: Double? = null

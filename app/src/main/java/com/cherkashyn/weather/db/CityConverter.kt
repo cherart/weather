@@ -46,6 +46,9 @@ object CityConverter {
                 .append(it.windSpeed).append(",")
                 .append(it.precipIntensity).append(",")
                 .append(it.temperatureMax).append(",")
+                .append(it.sunriseTime).append(",")
+                .append(it.sunsetTime).append(",")
+
         }
         return stringBuilder.toString()
     }
@@ -55,7 +58,7 @@ object CityConverter {
     fun toDataDaily(data: String): List<DataDaily> {
         val list = data.split(",")
         val result = ArrayList<DataDaily>()
-        for (i in 0 until list.lastIndex step 6) {
+        for (i in 0 until list.lastIndex step 8) {
             val dataDaily = DataDaily()
             dataDaily.icon = list[i]
             dataDaily.time = list[i + 1].toInt()
@@ -63,6 +66,8 @@ object CityConverter {
             dataDaily.windSpeed = list[i + 3].toDouble()
             dataDaily.precipIntensity = list[i + 4].toDouble()
             dataDaily.temperatureMax = list[i + 5].toDouble()
+            dataDaily.sunriseTime = list[i + 6].toInt()
+            dataDaily.sunsetTime = list[i + 7].toInt()
             result.add(dataDaily)
         }
         return result
