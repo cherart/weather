@@ -1,0 +1,25 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/rubik_regular</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
+
+    <style name="Weather.TextView" parent="Base.Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="Weather.TextView.Day" parent="Weather.TextView">
+        <item name="android:textSize">8pt</item>
+    </style>
+
+    <style name="Weather.TextView.Day.Expanded" parent="Weather.TextView.Day">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+</resources>

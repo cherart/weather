@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+
+    <TextView
+            android:id="@+id/cityPageTemperature"
+            android:layout_width="wrap_content"
+            android:layout_height="102dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="32pt"
+            app:layout_constraintTop_toTopOf="@+id/cityPageIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/cityPageIcon"/>
+
+    <TextView
+            android:id="@+id/cityPageSummary"
+            android:textSize="8pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/cityPageTemperature"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/cityPageTemperature"/>
+
+    <TextView
+            android:id="@+id/cityPageCityName"
+            android:textSize="12pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="24dp"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.6"
+            android:id="@+id/cityPageIcon"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintVertical_bias="0.8"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
