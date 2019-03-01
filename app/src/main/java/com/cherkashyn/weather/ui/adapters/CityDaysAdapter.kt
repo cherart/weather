@@ -1,5 +1,6 @@
 package com.cherkashyn.weather.ui.adapters
 
+import android.animation.ObjectAnimator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class CityDaysAdapter @Inject constructor() : RecyclerView.Adapter<CityDaysAdapt
     lateinit var dataDaily: List<DataDaily>
     lateinit var subView: View
     lateinit var callback: CityDetailsFragment.CityDetailsCallback
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_expanded_day, parent, false)
@@ -58,10 +60,13 @@ class CityDaysAdapter @Inject constructor() : RecyclerView.Adapter<CityDaysAdapt
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+
         fun bind(data: DataDaily) {
             val expanded = data.expanded
             itemView.expandedLayout.visibility = if (expanded) View.VISIBLE else View.GONE
             itemView.expandedDayOfWeek.text = getDayOfWeek(data.time!!)
+            itemView.expandedArrow.animate().rotation(if (expanded) 180F else 0F).start()
+
             data.apply {
 
                 val temperature: String = temperatureMax!!.toInt().toString() + "º"
