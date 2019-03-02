@@ -41,4 +41,25 @@ class CityRepository @Inject constructor(var webservice: WeatherService, var cit
                 }
             })
     }
+
+    fun refreshRemoteWeather(lat: Double, lon: Double, id: Int) {
+        webservice
+            .getCityWeather(lat.toString(), lon.toString())
+            .enqueue(object : Callback<City> {
+                override fun onFailure(call: Call<City>, t: Throwable) {}
+
+                override fun onResponse(call: Call<City>, response: Response<City>) {
+                    if (response.code() == 200) {
+                        cityDao.updateCity(response.body()!!.apply {
+                            name = geocoder.getFromLocation(lat, lon, 1)[0].locality + if (id == 0) " " else ""
+                            this.id = id
+                        })
+                    }
+                }
+            })
+    }
+
+    fun getCityWeather(id: Int): City {
+        return cityDao.getCityById(id)
+    }
 }

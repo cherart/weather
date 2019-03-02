@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class SharedViewModel @Inject constructor(var cityRepository: CityRepository) : ViewModel() {
 
-    fun refresh(lat: Double, lon: Double, cur: Boolean) {
-        cityRepository.getRemoteWeather(lat, lon, cur)
+    fun refresh(lat: Double, lon: Double, id: Int) {
+        cityRepository.refreshRemoteWeather(lat, lon, id)
     }
 
     fun getAllCities(): LiveData<List<City>> {
@@ -20,7 +20,7 @@ class SharedViewModel @Inject constructor(var cityRepository: CityRepository) : 
         cityRepository.addCity(lat, lon, cur)
     }
 
-    fun updateCity(lat: String, lon: String) {
-
+    fun getCityWeather(id: Int): City {
+        return cityRepository.getCityWeather(id)
     }
 }
