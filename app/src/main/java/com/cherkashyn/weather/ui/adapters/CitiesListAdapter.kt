@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListAdapter.ViewHolder>() {
 
-    lateinit var cities: List<City>
+    lateinit var cities: ArrayList<City>
     private lateinit var listener: CitiesListFragment.OnItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,9 +42,29 @@ class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListA
         }
     }
 
-    fun setData(cities: List<City>) {
-        this.cities = cities
-        notifyDataSetChanged()
+    fun setData(citiesList: List<City>) {
+        if (!::cities.isInitialized) {
+            cities = citiesList as ArrayList<City>
+            notifyDataSetChanged()
+        } else {
+            if (cities.size < citiesList.size) {
+                for (i in 0..citiesList.lastIndex) {
+                    if (!cities.contains(citiesList[i])) {
+                        cities = citiesList as ArrayList<City>
+                        notifyItemInserted(citiesList.lastIndex)
+                        return
+                    }
+                }
+            } else if (cities.size > citiesList.size) {
+                for (i in 0..cities.lastIndex) {
+                    if (i == cities.lastIndex || cities[i].id != citiesList[i].id) {
+                        cities = citiesList as ArrayList<City>
+                        notifyItemRemoved(i)
+                        return
+                    }
+                }
+            }
+        }
     }
 
     fun getData(): List<City> {
