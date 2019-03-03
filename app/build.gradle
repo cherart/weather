@@ -66,8 +66,8 @@ dependencies {
     implementation "androidx.room:room-runtime:2.1.0-alpha04"
     kapt 'androidx.room:room-compiler:2.1.0-alpha04'
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-beta02'
-    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-beta02'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-rc02'
+    implementation 'android.arch.navigation:navigation-ui-ktx:1.0.0-rc02'
 
     //Dependency Injection
     implementation 'com.google.dagger:dagger:2.16'

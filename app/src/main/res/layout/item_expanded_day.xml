@@ -6,69 +6,76 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
+            android:foreground="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <TextView
-                style="@style/Weather.TextView.Day"
-                android:id="@+id/expandedDayOfWeek"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginBottom="32dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <TextView
-                style="@style/Weather.TextView.Day"
-                android:layout_marginEnd="32dp"
-                android:id="@+id/expandedTemperature"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <ImageView
-                android:id="@+id/expandedIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                app:layout_constraintHorizontal_bias="0.7"/>
-
-        <View
-                android:id="@+id/lineSeparator"
-                android:background="@android:color/black"
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="32dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="32dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="wrap_content">
+
+            <TextView
+                    style="@style/Weather.TextView.Day"
+                    android:id="@+id/expandedDayOfWeek"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:textSize="10pt"
+                    android:text="Сейчас"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                    android:id="@+id/expandedIcon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintHorizontal_bias="0.6"/>
+
+            <TextView
+                    style="@style/Weather.TextView.Day"
+                    android:layout_marginEnd="32dp"
+                    android:textSize="10pt"
+                    android:id="@+id/expandedTemperature"
+                    app:layout_constraintEnd_toEndOf="@id/expandedArrow"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                    android:id="@+id/expandedArrow"
+                    android:src="@drawable/ic_expand_24px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="16dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/expandedLayout"
+            android:background="#FAFAFA"
+            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
         <TextView
                 android:id="@+id/expandedSubDayOfWeek"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Weather.TextView.Day.Expanded"
                 android:layout_marginTop="8dp" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="32dp" app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
                 android:id="@+id/expandedSubTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" app:layout_constraintStart_toEndOf="@+id/expandedSubDayOfWeek"
+                style="@style/Weather.TextView.Day.Expanded"
+                app:layout_constraintStart_toEndOf="@+id/expandedSubDayOfWeek"
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toTopOf="@+id/expandedSubDayOfWeek"/>
 
@@ -83,8 +90,7 @@
         <TextView
                 android:id="@+id/expandedSubTemperature"
                 android:textSize="24pt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Weather.TextView.Day.Expanded"
                 app:layout_constraintStart_toEndOf="@+id/expandedSubIcon"
                 app:layout_constraintTop_toTopOf="@+id/expandedSubIcon"
                 android:layout_marginStart="16dp"
@@ -93,7 +99,7 @@
         <TextView
                 android:id="@+id/expandedSubHumidity"
                 android:text="Влажность:"
-                style="@style/Weather.TextView"
+                style="@style/Weather.TextView.Day.Expanded"
                 app:layout_constraintStart_toEndOf="@+id/expandedSubTemperature"
                 android:layout_marginStart="24dp"
                 app:layout_constraintTop_toTopOf="@+id/expandedSubTemperature"/>
@@ -101,7 +107,7 @@
         <TextView
                 android:id="@+id/expandedSubWind"
                 android:text="Ветер:"
-                style="@style/Weather.TextView"
+                style="@style/Weather.TextView.Day.Expanded"
                 app:layout_constraintEnd_toEndOf="@+id/expandedSubHumidity"
                 app:layout_constraintTop_toBottomOf="@+id/expandedSubHumidity"
                 android:layout_marginTop="8dp"/>
@@ -109,13 +115,13 @@
         <TextView
                 android:id="@+id/ExpandedSubPrecipitation"
                 android:text="Осадки:"
-                style="@style/Weather.TextView"
+                style="@style/Weather.TextView.Day.Expanded"
                 app:layout_constraintTop_toBottomOf="@+id/expandedSubWind"
                 app:layout_constraintEnd_toEndOf="@+id/expandedSubWind"
                 android:layout_marginTop="8dp"/>
         <TextView
                 android:id="@+id/expandedSubHumidityValue"
-                style="@style/Weather.TextView"
+                style="@style/Weather.TextView.Day.Expanded"
                 app:layout_constraintStart_toEndOf="@+id/expandedSubHumidity"
                 app:layout_constraintTop_toTopOf="@+id/expandedSubHumidity"
                 android:layout_marginStart="24dp"
@@ -125,14 +131,14 @@
 
         <TextView
                 android:id="@+id/expandedSubWindValue"
-                style="@style/Weather.TextView"
+                style="@style/Weather.TextView.Day.Expanded"
                 app:layout_constraintStart_toStartOf="@+id/expandedSubHumidityValue"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/expandedSubHumidityValue"/>
 
         <TextView
                 android:id="@+id/expandedSubPrecipitationValue"
-                style="@style/Weather.TextView"
+                style="@style/Weather.TextView.Day.Expanded"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/expandedSubWindValue"
                 app:layout_constraintStart_toStartOf="@+id/expandedSubWindValue"/>

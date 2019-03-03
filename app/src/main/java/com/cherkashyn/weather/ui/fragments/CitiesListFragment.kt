@@ -1,18 +1,26 @@
 package com.cherkashyn.weather.ui.fragments
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.transition.ChangeBounds
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cherkashyn.weather.R
 import com.cherkashyn.weather.model.City
@@ -21,6 +29,7 @@ import com.cherkashyn.weather.ui.adapters.HoursListAdapter
 import com.cherkashyn.weather.utils.getDayOfWeek
 import com.cherkashyn.weather.utils.getIcon
 import com.cherkashyn.weather.utils.getTime
+import com.cherkashyn.weather.utils.isCityDay
 import com.cherkashyn.weather.viewmodel.SharedViewModel
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.model.Place
@@ -30,6 +39,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.yarolegovich.discretescrollview.transform.DiscreteScrollItemTransformer
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_cities_list.view.*
+import kotlinx.android.synthetic.main.item_city.view.*
 import kotlinx.android.synthetic.main.item_expanded_day.*
 import kotlinx.android.synthetic.main.item_expanded_day.view.*
 import java.util.*
@@ -38,9 +48,13 @@ import javax.inject.Inject
 
 class CitiesListFragment : DaggerFragment() {
 
-    lateinit var liveAllCities: LiveData<List<City>>
+    var isFirst = true
+    var color = 0
+    var image = 0
 
     lateinit var mainView: View
+
+    lateinit var liveAllCities: LiveData<List<City>>
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -64,6 +78,25 @@ class CitiesListFragment : DaggerFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mainView = inflater.inflate(R.layout.fragment_cities_list, container, false)
         setHasOptionsMenu(true)
+
+        if (isFirst) {
+            mainView.cardTransition.visibility = View.GONE
+            isFirst = false
+        } else {
+            mainView.imageTransition.apply {
+                setImageResource(image)
+                postDelayed({
+                    setImageDrawable(null)
+                }, 800)
+            }
+            mainView.cardTransition.apply {
+                setCardBackgroundColor(color)
+                postDelayed({
+                    visibility = View.GONE
+                }, 800)
+            }
+        }
+
         return mainView
     }
 
@@ -98,10 +131,27 @@ class CitiesListFragment : DaggerFragment() {
 
     private fun adapterSetOnItemClickListener() {
         citiesListAdapter.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(position: Int) {
+            override fun onItemClick(position: Int, itemView: View, city: City) {
                 val bundle = Bundle()
                 bundle.putInt("position", position)
-                activity?.findNavController(R.id.navHostFragment)?.navigate(R.id.cityDetailsFragment, bundle)
+                bundle.putInt("id", city.id!!)
+
+                image = getIcon(city.currently!!.icon!!, true)
+                mainView.imageTransition.setImageResource(image)
+                mainView.cardTransition.apply {
+                    color =
+                        resources.getColor(if (isCityDay(city)) R.color.colorArcBackgroundDay else R.color.colorArcBackgroundNight)
+                    setCardBackgroundColor(color)
+                    visibility = View.VISIBLE
+                }
+
+                val extras = FragmentNavigator.Extras.Builder()
+                    .addSharedElement(mainView.imageTransition, "secondTransition")
+                    .addSharedElement(mainView.cardTransition, "sixTransition")
+                    .build()
+
+                activity?.findNavController(R.id.navHostFragment)
+                    ?.navigate(R.id.cityDetailsFragment, bundle, null, extras)
             }
         })
     }
@@ -130,7 +180,7 @@ class CitiesListFragment : DaggerFragment() {
         val autocomplete: AutocompleteSupportFragment =
             childFragmentManager.findFragmentById(R.id.citiesListAutocompleteFragment) as AutocompleteSupportFragment
         mainView.findViewById<ImageView>(R.id.places_autocomplete_search_button).apply {
-            setImageResource(R.drawable.ic_add_white_24dp)
+            setImageResource(R.drawable.ic_add_24px)
             val typedValue = TypedValue()
             activity!!.theme.resolveAttribute(android.R.attr.actionBarItemBackground, typedValue, true)
             if (typedValue.resourceId != 0) {
@@ -164,12 +214,34 @@ class CitiesListFragment : DaggerFragment() {
     }
 
     private fun initOnItemChangedListener() {
+        var colorPrevious = ContextCompat.getColor(context!!, R.color.colorArcBackgroundDay)
+
         mainView.citiesListDiscreteScrollView.addOnItemChangedListener { holder, position ->
+
             if (citiesListAdapter.getData().isNotEmpty()) {
                 val city = citiesListAdapter.getData()[position]
 
+                val layerDrawable: LayerDrawable = mainView.arcView.background as LayerDrawable
+                val drawable: GradientDrawable = layerDrawable.findDrawableByLayerId(R.id.arc) as GradientDrawable
+                val colorCurrent = ContextCompat.getColor(
+                    context!!,
+                    if (isCityDay(city)) R.color.colorArcBackgroundDay else R.color.colorArcBackgroundNight
+                )
+                ValueAnimator.ofObject(ArgbEvaluator(), colorPrevious, colorCurrent).apply {
+                    duration = 500
+                    addUpdateListener { animation ->
+                        mainView.citiesListToolbar.setBackgroundColor(animation.animatedValue as Int)
+                        activity!!.window.statusBarColor = animation.animatedValue as Int
+                        drawable.setColor(animation.animatedValue as Int)
+                    }
+                    start()
+                }
+                colorPrevious = colorCurrent
+
+
+
                 if (System.currentTimeMillis() / 1000L - city.currently!!.time!! > 2000) {
-                    viewModel.refresh(city.latitude!!, city.longitude!!, position == 0)
+                    viewModel.refresh(city.latitude!!, city.longitude!!, city.id!!)
                 } else {
                     with(city.currently!!) {
 
@@ -203,6 +275,6 @@ class CitiesListFragment : DaggerFragment() {
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, itemView: View, city: City)
     }
 }

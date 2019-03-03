@@ -10,12 +10,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.ChangeBounds
 import com.cherkashyn.weather.R
 import com.cherkashyn.weather.model.City
 import com.cherkashyn.weather.model.DataHourly
-import com.cherkashyn.weather.ui.adapters.CitiesPagesAdapter
 import com.cherkashyn.weather.ui.adapters.CityDaysAdapter
 import com.cherkashyn.weather.ui.adapters.HoursListAdapter
+import com.cherkashyn.weather.utils.getIcon
+import com.cherkashyn.weather.utils.isCityDay
 import com.cherkashyn.weather.viewmodel.SharedViewModel
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_city_details.view.*
@@ -25,7 +27,7 @@ import javax.inject.Inject
 class CityDetailsFragment : DaggerFragment() {
 
     var position: Int = 0
-    lateinit var liveAllCities: LiveData<List<City>>
+    var cityId: Int = 0
 
     lateinit var mainView: View
 
@@ -36,14 +38,22 @@ class CityDetailsFragment : DaggerFragment() {
     @Inject
     lateinit var hoursListAdapter: HoursListAdapter
     @Inject
-    lateinit var citiesPagesAdapter: CitiesPagesAdapter
-    @Inject
     lateinit var cityDaysAdapter: CityDaysAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        sharedElementEnterTransition = ChangeBounds().apply {
+            duration = 750
+
+        }
+        sharedElementReturnTransition = ChangeBounds().apply {
+            duration = 750
+        }
+
         mainView = inflater.inflate(R.layout.fragment_city_details, container, false)
         position = arguments!!.getInt("position")
+        cityId = arguments!!.getInt("id")
+
         return mainView
     }
 
@@ -52,22 +62,14 @@ class CityDetailsFragment : DaggerFragment() {
         super.onActivityCreated(savedInstanceState)
 
         initViewModel()
-        initDiscreteScrollView()
         initRecyclerView()
-        initLiveAllCities()
-        initOnItemChangedListener()
+        initCityPage()
     }
 
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory)[SharedViewModel::class.java]
     }
 
-    private fun initDiscreteScrollView() {
-        mainView.cityDetailsDiscreteScrollView.apply {
-            adapter = citiesPagesAdapter
-            scrollToPosition(3)//TODO
-        }
-    }
 
     private fun initRecyclerView() {
         mainView.cityDetailsRecyclerView.apply {
@@ -91,19 +93,19 @@ class CityDetailsFragment : DaggerFragment() {
         })
     }
 
-    private fun initLiveAllCities() {
-        liveAllCities = viewModel.getAllCities().apply {
-            observe(viewLifecycleOwner, Observer { cities ->
-                citiesPagesAdapter.setData(cities)
-            })
-        }
-    }
+    private fun initCityPage() {
+        val city = viewModel.getCityWeather(cityId)
+        mainView.cityDetails.setCardBackgroundColor(
+            if (isCityDay(city)) resources.getColor(R.color.colorArcBackgroundDay) else resources.getColor(
+                R.color.colorArcBackgroundNight
+            )
+        )
+        mainView.cityPageSummary.text = city.currently!!.summary
+        mainView.cityPageCityName.text = city.name
+        mainView.cityPageTemperature.text = city.currently!!.temperature!!.toInt().toString() + "º"
+        mainView.cityPageIcon.setImageResource(getIcon(city.currently!!.icon!!, true))
 
-    private fun initOnItemChangedListener() {
-        mainView.cityDetailsDiscreteScrollView.addOnItemChangedListener { holder, position ->
-            val city = citiesPagesAdapter.getData()[position]
-            cityDaysAdapter.setData(city)
-        }
+        cityDaysAdapter.setData(city)
     }
 
     interface CityDetailsCallback {

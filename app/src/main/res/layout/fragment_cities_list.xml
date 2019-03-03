@@ -1,50 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-            android:orientation="vertical"
+    <View
+            android:id="@+id/arcView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="170dp"
+            android:background="@drawable/arc_cities_list"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/citiesListToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <View
-                    android:layout_width="match_parent"
-                    android:layout_height="170dp"
-                    android:background="@drawable/arc_cities_list"
-                    app:layout_constraintTop_toTopOf="parent" android:id="@+id/view"/>
+        <fragment
+                android:id="@+id/citiesListAutocompleteFragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+    </androidx.appcompat.widget.Toolbar>
 
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/citiesListToolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent"
-                    app:layout_constraintTop_toTopOf="parent">
 
-                <fragment
-                        android:id="@+id/citiesListAutocompleteFragment"
-                        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-            </androidx.appcompat.widget.Toolbar>
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+            android:id="@+id/citiesListDiscreteScrollView"
+            android:scaleType="centerInside"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_constraintTop_toBottomOf="@+id/citiesListToolbar"/>
 
-            <com.yarolegovich.discretescrollview.DiscreteScrollView
-                    android:id="@+id/citiesListDiscreteScrollView"
-                    android:scaleType="centerInside"
-                    android:elevation="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:layout_constraintTop_toBottomOf="@+id/citiesListToolbar"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cardTransition"
+            android:transitionName="fiveTransition"
+            app:cardCornerRadius="32dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/citiesListExpanded"
+            app:layout_constraintTop_toTopOf="@+id/citiesListDiscreteScrollView">
 
-        <include layout="@layout/item_expanded_day"/>
-    </LinearLayout>
+        <ImageView
+                android:id="@+id/imageTransition"
+                android:transitionName="firstTransition"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"/>
+    </androidx.cardview.widget.CardView>
 
-</ScrollView>
+    <include
+            android:id="@+id/citiesListExpanded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/item_expanded_day"
+            app:layout_constraintTop_toBottomOf="@+id/citiesListDiscreteScrollView"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

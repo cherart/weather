@@ -1,6 +1,7 @@
 package com.cherkashyn.weather.utils
 
 import com.cherkashyn.weather.R
+import com.cherkashyn.weather.model.City
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,3 +63,8 @@ fun getIcon(icon: String, colored: Boolean): Int {
 //        else -> R.color.colorBackgroundClearDay
 //    }
 //}
+
+fun isCityDay(city: City): Boolean {
+    return city.currently!!.time!! > city.daily!!.dataDailies!![0].sunriseTime!! &&
+            city.currently!!.time!! < city.daily!!.dataDailies!![0].sunsetTime!!
+}

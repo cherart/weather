@@ -9,7 +9,7 @@
             android:right="-100dp"
             android:top="-80dp">
         <shape android:shape="oval">
-            <solid android:color="#10CCCCCC" />
+            <solid android:color="#10CCCCCC"/>
             <padding android:top="2dp" android:right="2dp" android:bottom="2dp" android:left="2dp"/>
         </shape>
     </item>
@@ -19,7 +19,7 @@
             android:right="-100dp"
             android:top="-80dp">
         <shape android:shape="oval">
-            <solid android:color="#20CCCCCC" />
+            <solid android:color="#20CCCCCC"/>
             <padding android:top="2dp" android:right="2dp" android:bottom="2dp" android:left="2dp"/>
         </shape>
     </item>
@@ -29,7 +29,7 @@
             android:right="-100dp"
             android:top="-80dp">
         <shape android:shape="oval">
-            <solid android:color="#40CCCCCC" />
+            <solid android:color="#40CCCCCC"/>
             <padding android:top="2dp" android:right="2dp" android:bottom="2dp" android:left="2dp"/>
         </shape>
     </item>
@@ -39,7 +39,7 @@
             android:right="-100dp"
             android:top="-80dp">
         <shape android:shape="oval">
-            <solid android:color="#50CCCCCC" />
+            <solid android:color="#50CCCCCC"/>
             <padding android:top="2dp" android:right="2dp" android:bottom="2dp" android:left="2dp"/>
         </shape>
     </item>
@@ -49,17 +49,18 @@
             android:right="-100dp"
             android:top="-80dp">
         <shape android:shape="oval">
-            <solid android:color="#60CCCCCC" />
+            <solid android:color="#60CCCCCC"/>
             <padding android:top="1dp" android:right="1dp" android:bottom="1dp" android:left="1dp"/>
         </shape>
     </item>
     <item
+            android:id="@+id/arc"
             android:bottom="0dp"
             android:left="-100dp"
             android:right="-100dp"
             android:top="-80dp">
         <shape android:shape="oval">
-            <solid android:color="@color/colorPrimaryDark" />
+            <solid android:color="@color/colorArcBackgroundDay"/>
         </shape>
     </item>
 </layer-list>

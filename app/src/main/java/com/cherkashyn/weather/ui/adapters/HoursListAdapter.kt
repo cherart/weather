@@ -27,7 +27,7 @@ class HoursListAdapter @Inject constructor() : RecyclerView.Adapter<HoursListAda
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.hourTemperature.text = dataHourly[position].temperature!!.toInt().toString() + "º"
         holder.itemView.hourTime.text = getTime(dataHourly[position].time!!)
-        holder.itemView.hourIcon.setImageResource(getIcon(dataHourly[position].icon!!, true))
+        holder.itemView.hourIcon.setImageResource(getIcon(dataHourly[position].icon!!, false))
     }
 
     fun setData(dataHourly: List<DataHourly>) {

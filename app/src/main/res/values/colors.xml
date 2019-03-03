@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
-    <!--<color name="colorPrimaryDark">#F0F0F0</color>-->
     <color name="colorPrimaryDark">#7DCEFF</color>
-    <color name="colorAccent">#B7DDFD</color>
-    <color name="colorBackgroundClearDay">#FFF1A4</color>
-    <color name="colorBackgroundClearNight">#124874</color>
-    <color name="colorBackgroundPartlyCloudyDay">#ACA575</color>
-    <color name="colorBackgroundPartlyCloudyNight">#404E57</color>
-    <color name="colorBackgroundSnow">#C9DCF8</color>
-    <color name="colorBackgroundRain">#2277BB</color>
-    <color name="colorBackgroundSleet">#999999</color>
-    <color name="colorBackgroundFog">#B8B8B8</color>
-    <color name="colorBackgroundWind">#C0C0C0</color>
-    <color name="colorBackgroundCloudy">#888888</color>
-    <color name="colorBackgroundHail">#B7DDFD</color>
-    <color name="colorBackgroundThunderstorm">#B7DDFD</color>
-    <color name="colorBackgroundTornado">#B7DDFD</color>
+    <color name="colorAccent">#659BD1</color>
+    <color name="colorArcBackgroundDay">#2196F3</color>
+    <color name="colorArcBackgroundNight">#3F51B5</color>
+    <!--<color name="colorBackgroundPartlyCloudyDay">#ACA575</color>-->
+    <!--<color name="colorBackgroundPartlyCloudyNight">#404E57</color>-->
+    <!--<color name="colorBackgroundSnow">#C9DCF8</color>-->
+    <!--<color name="colorBackgroundRain">#2277BB</color>-->
+    <!--<color name="colorBackgroundSleet">#999999</color>-->
+    <!--<color name="colorBackgroundFog">#B8B8B8</color>-->
+    <!--<color name="colorBackgroundWind">#C0C0C0</color>-->
+    <!--<color name="colorBackgroundCloudy">#888888</color>-->
+    <!--<color name="colorBackgroundHail">#B7DDFD</color>-->
+    <!--<color name="colorBackgroundThunderstorm">#B7DDFD</color>-->
+    <!--<color name="colorBackgroundTornado">#B7DDFD</color>-->
 </resources>

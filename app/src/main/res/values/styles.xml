@@ -5,6 +5,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:fontFamily">@font/rubik_regular</item>
+
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
@@ -15,11 +17,11 @@
     </style>
 
     <style name="Weather.TextView.Day" parent="Weather.TextView">
-        <item name="android:textSize">8pt</item>
+
     </style>
 
     <style name="Weather.TextView.Day.Expanded" parent="Weather.TextView.Day">
-        <item name="android:textColor">@color/colorAccent</item>
+
     </style>
 
 </resources>
