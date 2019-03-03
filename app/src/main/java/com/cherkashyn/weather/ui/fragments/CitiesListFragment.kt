@@ -221,6 +221,8 @@ class CitiesListFragment : DaggerFragment() {
             if (citiesListAdapter.getData().isNotEmpty()) {
                 val city = citiesListAdapter.getData()[position]
 
+                mainView.cityNameBig.text = city.name
+
                 val layerDrawable: LayerDrawable = mainView.arcView.background as LayerDrawable
                 val drawable: GradientDrawable = layerDrawable.findDrawableByLayerId(R.id.arc) as GradientDrawable
                 val colorCurrent = ContextCompat.getColor(
