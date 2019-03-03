@@ -228,7 +228,7 @@ class CitiesListFragment : DaggerFragment() {
                     if (isCityDay(city)) R.color.colorArcBackgroundDay else R.color.colorArcBackgroundNight
                 )
                 ValueAnimator.ofObject(ArgbEvaluator(), colorPrevious, colorCurrent).apply {
-                    duration = 500
+                    duration = 300
                     addUpdateListener { animation ->
                         mainView.citiesListToolbar.setBackgroundColor(animation.animatedValue as Int)
                         activity!!.window.statusBarColor = animation.animatedValue as Int

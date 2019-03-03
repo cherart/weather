@@ -1,5 +1,8 @@
 package com.cherkashyn.weather.ui.adapters
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -61,12 +64,23 @@ class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListA
             itemView.cityName.text = city.name
             itemView.cityViewIcon.setImageResource(getIcon(city.currently!!.icon!!, true))
             itemView.setOnClickListener { listener.onItemClick(position, itemView, city) }
-            itemView.cityCardView.setCardBackgroundColor(
-                if (isCityDay(city))
-                    Color.parseColor("#2196F3")
-                else
-                    Color.parseColor("#3F51B5")
-            )
+            itemView.cityCardView.apply {
+                val currentColor = cardBackgroundColor.defaultColor
+                val nextColor =
+                    if (isCityDay(city))
+                        Color.parseColor("#2196F3")
+                    else
+                        Color.parseColor("#3F51B5")
+                if (currentColor != nextColor) {
+                    ValueAnimator.ofObject(ArgbEvaluator(), currentColor, nextColor).apply {
+                        duration = 300
+                        addUpdateListener { animation ->
+                            setCardBackgroundColor(animation.animatedValue as Int)
+                        }
+                        start()
+                    }
+                }
+            }
         }
     }
 }
