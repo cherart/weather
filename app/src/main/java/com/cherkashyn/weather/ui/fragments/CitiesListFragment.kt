@@ -132,26 +132,28 @@ class CitiesListFragment : DaggerFragment() {
     private fun adapterSetOnItemClickListener() {
         citiesListAdapter.setOnItemClickListener(object : OnItemClickListener {
             override fun onItemClick(position: Int, itemView: View, city: City) {
-                val bundle = Bundle()
-                bundle.putInt("position", position)
-                bundle.putInt("id", city.id!!)
+                if (mainView.citiesListDiscreteScrollView.currentItem == position) {
+                    val bundle = Bundle()
+                    bundle.putInt("position", position)
+                    bundle.putInt("id", city.id!!)
 
-                image = getIcon(city.currently!!.icon!!, true)
-                mainView.imageTransition.setImageResource(image)
-                mainView.cardTransition.apply {
-                    color =
-                        resources.getColor(if (isCityDay(city)) R.color.colorArcBackgroundDay else R.color.colorArcBackgroundNight)
-                    setCardBackgroundColor(color)
-                    visibility = View.VISIBLE
+                    image = getIcon(city.currently!!.icon!!, true)
+                    mainView.imageTransition.setImageResource(image)
+                    mainView.cardTransition.apply {
+                        color =
+                            resources.getColor(if (isCityDay(city)) R.color.colorArcBackgroundDay else R.color.colorArcBackgroundNight)
+                        setCardBackgroundColor(color)
+                        visibility = View.VISIBLE
+                    }
+
+                    val extras = FragmentNavigator.Extras.Builder()
+                        .addSharedElement(mainView.imageTransition, "secondTransition")
+                        .addSharedElement(mainView.cardTransition, "sixTransition")
+                        .build()
+
+                    activity?.findNavController(R.id.navHostFragment)
+                        ?.navigate(R.id.cityDetailsFragment, bundle, null, extras)
                 }
-
-                val extras = FragmentNavigator.Extras.Builder()
-                    .addSharedElement(mainView.imageTransition, "secondTransition")
-                    .addSharedElement(mainView.cardTransition, "sixTransition")
-                    .build()
-
-                activity?.findNavController(R.id.navHostFragment)
-                    ?.navigate(R.id.cityDetailsFragment, bundle, null, extras)
             }
         })
     }
