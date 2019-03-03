@@ -23,4 +23,8 @@ class SharedViewModel @Inject constructor(var cityRepository: CityRepository) : 
     fun getCityWeather(id: Int): City {
         return cityRepository.getCityWeather(id)
     }
+
+    fun deleteCity(city: City) {
+        cityRepository.deleteCity(city)
+    }
 }

@@ -62,4 +62,8 @@ class CityRepository @Inject constructor(var webservice: WeatherService, var cit
     fun getCityWeather(id: Int): City {
         return cityDao.getCityById(id)
     }
+
+    fun deleteCity(city: City) {
+        cityDao.deleteCity(city)
+    }
 }

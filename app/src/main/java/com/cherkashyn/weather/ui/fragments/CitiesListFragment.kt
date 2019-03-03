@@ -9,8 +9,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.transition.ChangeBounds
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
@@ -39,7 +37,6 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.yarolegovich.discretescrollview.transform.DiscreteScrollItemTransformer
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_cities_list.view.*
-import kotlinx.android.synthetic.main.item_city.view.*
 import kotlinx.android.synthetic.main.item_expanded_day.*
 import kotlinx.android.synthetic.main.item_expanded_day.view.*
 import java.util.*
@@ -52,8 +49,10 @@ class CitiesListFragment : DaggerFragment() {
     var color = 0
     var image = 0
 
-    lateinit var mainView: View
+    lateinit var menu: Menu
 
+    lateinit var city: City
+    lateinit var mainView: View
     lateinit var liveAllCities: LiveData<List<City>>
 
     @Inject
@@ -73,6 +72,14 @@ class CitiesListFragment : DaggerFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_toolbar, menu)
+        this.menu = menu
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menuDelete -> viewModel.deleteCity(city)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -221,7 +228,9 @@ class CitiesListFragment : DaggerFragment() {
         mainView.citiesListDiscreteScrollView.addOnItemChangedListener { holder, position ->
 
             if (citiesListAdapter.getData().isNotEmpty()) {
-                val city = citiesListAdapter.getData()[position]
+                city = citiesListAdapter.getData()[position]
+
+                menu.getItem(0).isVisible = city.id != 0
 
                 mainView.cityNameBig.text = city.name
 
