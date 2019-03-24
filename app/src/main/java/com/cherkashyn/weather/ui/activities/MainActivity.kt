@@ -22,8 +22,6 @@ class MainActivity : DaggerAppCompatActivity() {
     private fun checkAndRequestPermissions() {
         if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION), 1)
-        } else {
-            //TODO if not granted
         }
     }
 }

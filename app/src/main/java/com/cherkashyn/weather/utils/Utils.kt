@@ -1,5 +1,6 @@
 package com.cherkashyn.weather.utils
 
+import android.content.res.Resources
 import com.cherkashyn.weather.R
 import com.cherkashyn.weather.model.City
 import java.text.SimpleDateFormat
@@ -68,3 +69,5 @@ fun isCityDay(city: City): Boolean {
     return city.currently!!.time!! > city.daily!!.dataDailies!![0].sunriseTime!! &&
             city.currently!!.time!! < city.daily!!.dataDailies!![0].sunsetTime!!
 }
+
+fun dpToPx(dp: Int): Float = dp * Resources.getSystem().displayMetrics.density

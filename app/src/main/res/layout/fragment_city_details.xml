@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
@@ -32,13 +33,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
+                        android:textColor="#FFFF"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:textSize="10pt"
-                        android:layout_marginBottom="32dp" app:layout_constraintBottom_toBottomOf="parent"/>
+                        android:textSize="100dp"
+                        android:text="26"
+                        app:layout_constraintBottom_toBottomOf="@+id/cityPageIcon"
+                        app:layout_constraintTop_toTopOf="@+id/cityPageIcon"/>
 
                 <TextView
                         android:id="@+id/cityPageSummary"
                         android:textSize="8pt"
+                        android:text="Солнечно"
+                        android:textColor="#FFFF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="@+id/cityPageTemperature"
@@ -51,16 +57,16 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:layout_marginStart="8dp"
-                        app:layout_constraintHorizontal_bias="0.6"
                         android:id="@+id/cityPageIcon"
                         android:transitionName="secondTransition"
                         android:layout_marginEnd="32dp"
-                        app:layout_constraintVertical_bias="0.8"/>
+                        app:layout_constraintVertical_bias="0.75"/>
 
                 <TextView
+                        android:textColor="#FFFF"
                         android:id="@+id/cityPageCityName"
                         android:textSize="12pt"
+                        android:text="Мелитополь"
                         android:transitionName="fourthTransition"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

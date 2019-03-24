@@ -9,8 +9,10 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,10 +26,7 @@ import com.cherkashyn.weather.R
 import com.cherkashyn.weather.model.City
 import com.cherkashyn.weather.ui.adapters.CitiesListAdapter
 import com.cherkashyn.weather.ui.adapters.HoursListAdapter
-import com.cherkashyn.weather.utils.getDayOfWeek
-import com.cherkashyn.weather.utils.getIcon
-import com.cherkashyn.weather.utils.getTime
-import com.cherkashyn.weather.utils.isCityDay
+import com.cherkashyn.weather.utils.*
 import com.cherkashyn.weather.viewmodel.SharedViewModel
 import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.model.Place
@@ -137,7 +136,7 @@ class CitiesListFragment : DaggerFragment() {
     }
 
     private fun adapterSetOnItemClickListener() {
-        citiesListAdapter.setOnItemClickListener(object : OnItemClickListener {
+        citiesListAdapter.setOnItemClickListener(object : CitiesListOnItemClickListener {
             override fun onItemClick(position: Int, itemView: View, city: City) {
                 if (mainView.citiesListDiscreteScrollView.currentItem == position) {
                     val bundle = Bundle()
@@ -174,14 +173,19 @@ class CitiesListFragment : DaggerFragment() {
 
     @SuppressLint("MissingPermission")//TODO
     private fun initLocationManager() {
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10f, object : LocationListener {
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10f, object : LocationListener {
             override fun onLocationChanged(location: Location?) {
                 viewModel.addCity(location!!.latitude, location.longitude, true)
             }
 
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-            override fun onProviderEnabled(provider: String?) {}
-            override fun onProviderDisabled(provider: String?) {}
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+            }
+
+            override fun onProviderEnabled(provider: String?) {
+            }
+
+            override fun onProviderDisabled(provider: String?) {
+            }
         })
     }
 
@@ -259,18 +263,14 @@ class CitiesListFragment : DaggerFragment() {
                     with(city.currently!!) {
 
                         val temperature: String = temperature?.toInt().toString() + "º"
-                        val dayOfWeek: String = getDayOfWeek(time!!)
-                        val time: String = getTime(time!!)
                         val humidity: String = (humidity!! * 100).toInt().toString() + " %"
-                        val windSpeed: String = windSpeed.toString() + " м/c"
-                        val precip: String = precipIntensity.toString() + " мм/ч"
+                        val windSpeed: String = Math.round(windSpeed!!).toString() + " м/c"
+                        val precip: String = Math.round(precipIntensity!!).toString() + " мм/ч"
                         val iconColored: Int = getIcon(icon!!, true)
                         val iconBlue: Int = getIcon(icon!!, false)
 
                         expandedTemperature.text = temperature
                         expandedDayOfWeek.text = "Сейчас"
-                        expandedSubDayOfWeek.text = dayOfWeek
-                        expandedSubTime.text = time
                         expandedSubTemperature.text = temperature
                         expandedSubHumidityValue.text = humidity
                         expandedSubWindValue.text = windSpeed
@@ -285,9 +285,5 @@ class CitiesListFragment : DaggerFragment() {
                 }
             }
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(position: Int, itemView: View, city: City)
     }
 }

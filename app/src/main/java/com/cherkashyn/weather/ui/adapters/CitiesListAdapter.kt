@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cherkashyn.weather.R
 import com.cherkashyn.weather.model.City
 import com.cherkashyn.weather.ui.fragments.CitiesListFragment
+import com.cherkashyn.weather.utils.CitiesListOnItemClickListener
 import com.cherkashyn.weather.utils.getIcon
 import com.cherkashyn.weather.utils.isCityDay
 import kotlinx.android.synthetic.main.item_city.view.*
@@ -21,7 +22,7 @@ import javax.inject.Inject
 class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListAdapter.ViewHolder>() {
 
     lateinit var cities: ArrayList<City>
-    private lateinit var listener: CitiesListFragment.OnItemClickListener
+    private lateinit var listener: CitiesListOnItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_city, parent, false)
@@ -43,25 +44,23 @@ class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListA
     }
 
     fun setData(citiesList: List<City>) {
-        if (!::cities.isInitialized) {
-            cities = citiesList as ArrayList<City>
-            notifyDataSetChanged()
-        } else {
-            if (cities.size < citiesList.size) {
-                for (i in 0..citiesList.lastIndex) {
-                    if (!cities.contains(citiesList[i])) {
-                        cities = citiesList as ArrayList<City>
-                        notifyItemInserted(citiesList.lastIndex)
-                        return
-                    }
+        when {
+            !::cities.isInitialized || cities.size == citiesList.size -> {
+                cities = citiesList as ArrayList<City>
+                notifyDataSetChanged()
+            }
+            cities.size < citiesList.size -> for (i in 0..citiesList.lastIndex) {
+                if (!cities.contains(citiesList[i])) {
+                    cities = citiesList as ArrayList<City>
+                    notifyItemInserted(citiesList.lastIndex)
+                    return
                 }
-            } else if (cities.size > citiesList.size) {
-                for (i in 0..cities.lastIndex) {
-                    if (i == cities.lastIndex || cities[i].id != citiesList[i].id) {
-                        cities = citiesList as ArrayList<City>
-                        notifyItemRemoved(i)
-                        return
-                    }
+            }
+            cities.size > citiesList.size -> for (i in 0..cities.lastIndex) {
+                if (i == cities.lastIndex || cities[i].id != citiesList[i].id) {
+                    cities = citiesList as ArrayList<City>
+                    notifyItemRemoved(i)
+                    return
                 }
             }
         }
@@ -71,7 +70,7 @@ class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListA
         return cities
     }
 
-    fun setOnItemClickListener(listener: CitiesListFragment.OnItemClickListener) {
+    fun setOnItemClickListener(listener: CitiesListOnItemClickListener) {
         this.listener = listener
     }
 
@@ -79,9 +78,14 @@ class CitiesListAdapter @Inject constructor() : RecyclerView.Adapter<CitiesListA
 
         fun bind(
             city: City,
-            listener: CitiesListFragment.OnItemClickListener,
+            listener: CitiesListOnItemClickListener,
             position: Int
         ) {
+            if (position == 0) {
+                itemView.cityIconStatus.setImageResource(R.drawable.ic_place_24px)
+            } else {
+                itemView.cityIconStatus.setImageResource(R.drawable.ic_star_24px)
+            }
             itemView.cityName.text = city.name
             itemView.cityViewIcon.setImageResource(getIcon(city.currently!!.icon!!, true))
             itemView.setOnClickListener { listener.onItemClick(position, itemView, city) }

@@ -1,21 +1,20 @@
 package com.cherkashyn.weather.ui.fragments
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.ChangeBounds
 import com.cherkashyn.weather.R
-import com.cherkashyn.weather.model.City
 import com.cherkashyn.weather.model.DataHourly
 import com.cherkashyn.weather.ui.adapters.CityDaysAdapter
 import com.cherkashyn.weather.ui.adapters.HoursListAdapter
+import com.cherkashyn.weather.utils.DaysCallback
+import com.cherkashyn.weather.utils.DaysListOnItemClickListener
 import com.cherkashyn.weather.utils.getIcon
 import com.cherkashyn.weather.utils.isCityDay
 import com.cherkashyn.weather.viewmodel.SharedViewModel
@@ -77,17 +76,28 @@ class CityDetailsFragment : DaggerFragment() {
             layoutManager = LinearLayoutManager(activity)
             isNestedScrollingEnabled = false
         }
-        adapterSetOnItemClickListener()
+        setAdapterCallback()
+        setOnItemClickListener()
     }
 
-    private fun adapterSetOnItemClickListener() {
-        cityDaysAdapter.setOnItemClickListener(object : CityDetailsCallback {
+    private fun setAdapterCallback() {
+        cityDaysAdapter.setCallback(object : DaysCallback {
             override fun call(position: Int, view: View, dataHourly: List<DataHourly>) {
                 view.expandedSubRecyclerView.apply {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     adapter = HoursListAdapter().apply {
                         setData(dataHourly.subList(position, position + 25))
                     }
+                }
+            }
+        })
+    }
+
+    private fun setOnItemClickListener() {
+        cityDaysAdapter.setOnItemClickListener(object : DaysListOnItemClickListener {
+            override fun onItemClick(view: View) {
+                mainView.nestedScrollView.post {
+                    ObjectAnimator.ofInt(mainView.nestedScrollView, "scrollY", view.bottom).setDuration(500).start()
                 }
             }
         })
@@ -106,9 +116,5 @@ class CityDetailsFragment : DaggerFragment() {
         mainView.cityPageIcon.setImageResource(getIcon(city.currently!!.icon!!, true))
 
         cityDaysAdapter.setData(city)
-    }
-
-    interface CityDetailsCallback {
-        fun call(position: Int, view: View, dataHourly: List<DataHourly>)
     }
 }

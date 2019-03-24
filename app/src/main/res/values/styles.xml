@@ -21,7 +21,7 @@
     </style>
 
     <style name="Weather.TextView.Day.Expanded" parent="Weather.TextView.Day">
-
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>
